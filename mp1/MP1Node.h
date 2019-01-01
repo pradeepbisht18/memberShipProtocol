@@ -31,6 +31,7 @@
 enum MsgTypes{
     JOINREQ,
     JOINREP,
+    HEARTBEAT,
     DUMMYLASTMSGTYPE
 };
 
@@ -61,11 +62,13 @@ public:
 	Member * getMemberNode() {
 		return memberNode;
 	}
+    Address getnewAddress(int id, short port);
 	int recvLoop();
 	static int enqueueWrapper(void *env, char *buff, int size);
 	void nodeStart(char *servaddrstr, short serverport);
 	int initThisNode(Address *joinaddr);
 	int introduceSelfToGroup(Address *joinAddress);
+	int sendMessageEmulnet(MsgTypes type, Address *joinAddress);
 	int finishUpThisNode();
 	void nodeLoop();
 	void checkMessages();
@@ -76,6 +79,10 @@ public:
 	void initMemberListTable(Member *memberNode);
 	void printAddress(Address *addr);
 	virtual ~MP1Node();
+    bool isPresent(MemberListEntry node);
+    MemberListEntry* getNode(int id, short port);
+    void updateSender(int id, short port);
+    void addMemberList(int id, short port);
 };
 
 #endif /* _MP1NODE_H_ */
